@@ -55,6 +55,8 @@ from module.config.utils import (
     filepath_config,
     read_file,
 )
+from module.config.utils import time_delta
+from module.log_res.log_res import LogRes
 from module.logger import logger
 from module.ocr.rpc import start_ocr_server_process, stop_ocr_server_process
 from module.submodule.submodule import load_config
@@ -120,10 +122,34 @@ def timedelta_to_text(delta=None):
     time_delta_name = time_delta_name_prefix + time_delta_name_suffix
     return time_delta_display + t(time_delta_name)
 
+def timedelta_to_text(delta=None):
+    time_delta_name_suffix_dict = {
+        'Y': 'YearsAgo',
+        'M': 'MonthsAgo',
+        'D': 'DaysAgo',
+        'h': 'HoursAgo',
+        'm': 'MinutesAgo',
+        's': 'SecondsAgo',
+    }
+    time_delta_name_prefix = 'Gui.Overview.'
+    time_delta_name_suffix = 'NoData'
+    time_delta_display = ''
+    if isinstance(delta, dict):
+        for _key in delta:
+            if delta[_key]:
+                time_delta_name_suffix = time_delta_name_suffix_dict[_key]
+                time_delta_display = delta[_key]
+                break
+    time_delta_display = str(time_delta_display)
+    time_delta_name = time_delta_name_prefix + time_delta_name_suffix
+    return time_delta_display + t(time_delta_name)
+
+
 class AlasGUI(Frame):
     ALAS_MENU: Dict[str, Dict[str, List[str]]]
     ALAS_ARGS: Dict[str, Dict[str, Dict[str, Dict[str, str]]]]
     theme = "default"
+    _log = RichLog
 
     _log = RichLog
 
@@ -469,6 +495,7 @@ class AlasGUI(Frame):
         log = RichLog("log")
         self._log = log
         self._log.dashboard_arg_group = LogRes(self.alas_config).groups
+
         with use_scope("logs"):
             if 'Maa' in self.ALAS_ARGS:
                 put_scope(
@@ -517,7 +544,6 @@ class AlasGUI(Frame):
             color_off="off",
             scope="log_scroll_btn",
         )
-
         switch_dashboard = BinarySwitchButton(
             label_on=t("Gui.Button.DashboardON"),
             label_off=t("Gui.Button.DashboardOFF"),
@@ -528,7 +554,6 @@ class AlasGUI(Frame):
             color_off="on",
             scope="dashboard_btn",
         )
-
         self.task_handler.add(switch_scheduler.g(), 1, True)
         self.task_handler.add(switch_log_scroll.g(), 1, True)
         if 'Maa' not in self.ALAS_ARGS:
@@ -538,7 +563,7 @@ class AlasGUI(Frame):
             self.task_handler.add(self.alas_update_dashboard, 10, True)
         self.task_handler.add(log.put_log(self.alas), 0.25, True)
 
-    def set_dashboard_display(self, b = False):
+    def set_dashboard_display(self, b):
         self._log.set_dashboard_display(b)
         self.alas_update_dashboard(True)
 
@@ -578,6 +603,7 @@ class AlasGUI(Frame):
             config_updater: AzurLaneConfig = State.config_updater,
     ) -> None:
         try:
+            skip_time_record = False
             valid = []
             invalid = []
             config = config_updater.read_file(config_name)
@@ -1098,17 +1124,17 @@ class AlasGUI(Frame):
     def dev_utils(self) -> None:
         self.init_menu(name="Utils")
         self.set_title(t("Gui.MenuDevelop.Utils"))
-        put_button(label="Raise exception", onclick=raise_exception)
+        put_button(label=t("Gui.MenuDevelop.RaiseException"), onclick=raise_exception)
 
         def _force_restart():
             if State.restart_event is not None:
-                toast("Alas will restart in 3 seconds", duration=0, color="error")
+                toast(t("Gui.Toast.AlasRestart"), duration=0, color="error")
                 clearup()
                 State.restart_event.set()
             else:
-                toast("Reload not enabled", color="error")
+                toast(t("Gui.Toast.ReloadEnabled"), color="error")
 
-        put_button(label="Force restart", onclick=_force_restart)
+        put_button(label=t("Gui.MenuDevelop.ForceRestart"), onclick=_force_restart)
 
     @use_scope("content", clear=True)
     def dev_remote(self) -> None:
