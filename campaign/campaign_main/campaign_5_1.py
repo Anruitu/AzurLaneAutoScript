@@ -55,7 +55,6 @@ class Config:
         'distance': 50,
         'wlen': 1000
     }
-    HOMO_CANNY_THRESHOLD = (75, 100)
     HOMO_EDGE_COLOR_RANGE = (0, 49)
 
 

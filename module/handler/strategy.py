@@ -211,7 +211,7 @@ class StrategyHandler(InfoHandler):
         """
         return self.appear(MOB_MOVE_CANCEL, offset=(20, 20))
 
-    def strategy_has_mob_move(self):
+    def strategy_get_mob_move_remain(self):
         """
         Pages:
             in: STRATEGY_OPENED
@@ -220,12 +220,12 @@ class StrategyHandler(InfoHandler):
         if self.match_template_color(MOB_MOVE_ENTER, offset=MOB_MOVE_OFFSET):
             return True
         else:
-            return False
+            return 0
 
     def strategy_mob_move_enter(self, skip_first_screenshot=True):
         """
         Pages:
-            in: STRATEGY_OPENED, MOB_MOVE_ENTER
+            in: STRATEGY_OPENED, MOB_MOVE_1 or MOB_MOVE_2
             out: MOB_MOVE_CANCEL
         """
         logger.info('Mob move enter')
@@ -238,14 +238,16 @@ class StrategyHandler(InfoHandler):
             if self.appear(MOB_MOVE_CANCEL, offset=(20, 20)):
                 break
 
-            if self.appear_then_click(MOB_MOVE_ENTER, offset=MOB_MOVE_OFFSET, interval=5):
+            if self.appear_then_click(MOB_MOVE_1, offset=MOB_MOVE_OFFSET, interval=5):
+                continue
+            if self.appear_then_click(MOB_MOVE_2, offset=MOB_MOVE_OFFSET, interval=5):
                 continue
 
     def strategy_mob_move_cancel(self, skip_first_screenshot=True):
         """
         Pages:
             in: MOB_MOVE_CANCEL
-            out: STRATEGY_OPENED, MOB_MOVE_ENTER
+            out: STRATEGY_OPENED, MOB_MOVE_1 or MOB_MOVE_2
         """
         logger.info('Mob move cancel')
         while 1:
@@ -254,7 +256,8 @@ class StrategyHandler(InfoHandler):
             else:
                 self.device.screenshot()
 
-            if self.appear(MOB_MOVE_ENTER, offset=MOB_MOVE_OFFSET):
+            if self.appear(MOB_MOVE_1, offset=MOB_MOVE_OFFSET) \
+                    or self.appear(MOB_MOVE_2, offset=MOB_MOVE_OFFSET):
                 break
 
             if self.appear_then_click(MOB_MOVE_CANCEL, offset=(20, 20), interval=5):

@@ -178,3 +178,4 @@ Alas 仍在活跃开发中，我们会不定期发布未来的工作在 [Issues]
 - QQ 一群：[1087735381](https://jq.qq.com/?_wv=1027&k=I4NSqX7g) （有开发意向请加一群，入群需要提供你的Github用户名）
 - Bilibili 直播间：https://live.bilibili.com/22216705 ，偶尔直播写Alas，~~为了拯救Alas，Lme决定出道成为偶像~~
 
+特别声明，本项目是对原项目的自行合并，不做任何盈利使用！
