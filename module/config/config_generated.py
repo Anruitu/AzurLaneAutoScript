@@ -148,10 +148,15 @@ class GeneratedConfig:
     C124LargeLeveling_PickupAmmo = 3  # 3, 4, 5
 
     # Group `GemsFarming`
+    GemsFarming_ChangeFlagship = 'ship'  # ship, ship_equip
     GemsFarming_CommonCV = 'any'  # any, langley, bogue, ranger, hermes
-    GemsFarming_ChangeVanguard = 'ship'  # disabled, ship
+    GemsFarming_ChangeVanguard = 'ship'  # disabled, ship, ship_equip
     GemsFarming_CommonDD = 'any'  # any, favourite, aulick_or_foote, cassin_or_downes, z20_or_z21
     GemsFarming_CommissionLimit = True
+
+    # Group `EquipmentCode`
+    EquipmentCode_ExportToConfig = True
+    EquipmentCode_Config = None
 
     # Group `EventGeneral`
     EventGeneral_PtLimit = 0
@@ -180,7 +185,7 @@ class GeneratedConfig:
     MaritimeEscort_Enable = True
 
     # Group `Coalition`
-    Coalition_Mode = 'hard'  # easy, normal, hard, sp
+    Coalition_Mode = 'tc3'  # tc1, tc2, tc3, sp, ex
     Coalition_Fleet = 'single'  # single, multi
 
     # Group `Commission`
@@ -225,6 +230,7 @@ class GeneratedConfig:
     # Group `Meowfficer`
     Meowfficer_BuyAmount = 1
     Meowfficer_FortChoreMeowfficer = True
+    Meowfficer_OverflowCoins = -1
 
     # Group `MeowfficerTrain`
     MeowfficerTrain_Enable = False
@@ -339,7 +345,7 @@ class GeneratedConfig:
     PrivateQuarters_BuyRoses = True
     PrivateQuarters_BuyCake = False
     PrivateQuarters_TargetInteract = True
-    PrivateQuarters_TargetShip = 'anchorage'  # anchorage, noshiro, sirius, new_jersey, taihou, aegir
+    PrivateQuarters_TargetShip = 'anchorage'  # anchorage, noshiro, sirius, new_jersey, taihou, aegir, nakhimov
 
     # Group `Daily`
     Daily_UseDailySkip = True
